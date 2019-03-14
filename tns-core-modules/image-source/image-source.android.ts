@@ -5,8 +5,10 @@ import * as httpModule from "../http";
 
 // Types.
 import { path as fsPath, knownFolders } from "../file-system";
-import { isFileOrResourcePath, RESOURCE_PREFIX } from "../utils/utils";
+import { isFileOrResourcePath, RESOURCE_PREFIX, layout } from "../utils/utils";
 import { getNativeApplication } from "../application";
+import { Font } from "../ui/styling/font";
+import { Color } from "../color";
 
 export { isFileOrResourcePath };
 
@@ -136,6 +138,58 @@ export class ImageSource implements ImageSourceDefinition {
         return new Promise<boolean>((resolve, reject) => {
             resolve(this.loadFromBase64(data));
         });
+    }
+
+    public loadFromFontIconCode(source: string, font: Font, color: Color): boolean {
+        const paint = new android.graphics.Paint();
+        paint.setTypeface(font.getAndroidTypeface());
+        if (color) {
+            paint.setColor(color.android);
+        }
+        if (font.fontSize) {
+            paint.setTextSize(layout.toDevicePixels(font.fontSize));
+        }
+        paint.setAntiAlias(true);
+
+        const textBounds = new android.graphics.Rect();
+        paint.getTextBounds(source, 0, source.length, textBounds);
+
+        const bitmap = android.graphics.Bitmap
+            .createBitmap(
+                textBounds.width(),
+                textBounds.height(),
+                android.graphics.Bitmap.Config.ARGB_8888
+            );
+
+        const canvas = new android.graphics.Canvas(bitmap);
+        canvas.drawText(source, -textBounds.left, -textBounds.top, paint);
+
+        // const memory = bitmap.getRowBytes() * bitmap.getByteCount();
+        const memory = bitmap.getByteCount();
+        console.log("MEMORY -> " + memory);
+
+        this.android = bitmap;
+
+        // let fos = null;
+
+        // try {
+        //     fos = new java.io.FileOutputStream(new java.io.File(cacheFilePath));
+        //     bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
+        //     fos.flush();
+        // } catch (error) {
+        //     console.error(error);
+        // } finally {
+        //     try {
+        //         if (fos != null) {
+        //             fos.close();
+        //             fos = null;
+        //         }
+        //     } catch (error) {
+        //         console.error(error);
+        //     }
+        // }
+
+        return this.android != null;
     }
 
     public setNativeSource(source: any): void {

@@ -1,0 +1,5 @@
+<Page navigatingTo="navigatingTo">
+    <GridLayout>
+        <Image src="font://&#xF10B;" class="font-awesome"/>
+    </GridLayout>
+</Page>

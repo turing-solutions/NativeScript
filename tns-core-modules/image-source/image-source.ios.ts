@@ -1,11 +1,13 @@
 ﻿// Definitions.
 import { ImageSource as ImageSourceDefinition } from ".";
 import { ImageAsset } from "../image-asset";
+import { Font } from "../ui/styling/font";
+import { Color } from "../color";
 import * as httpModule from "../http";
 
 // Types.
 import { path as fsPath, knownFolders } from "../file-system";
-import { isFileOrResourcePath, RESOURCE_PREFIX } from "../utils/utils";
+import { isFileOrResourcePath, RESOURCE_PREFIX, layout } from "../utils/utils";
 
 export { isFileOrResourcePath };
 
@@ -14,6 +16,17 @@ function ensureHttp() {
     if (!http) {
         http = require("../http");
     }
+}
+
+function getHashCode(value: any): number {
+    var hash = 0;
+    if (value.length === 0) { return hash };
+    for (const i in value) {
+        const char = value.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash;
 }
 
 export class ImageSource implements ImageSourceDefinition {
@@ -116,6 +129,46 @@ export class ImageSource implements ImageSourceDefinition {
                 reject(ex);
             }
         });
+    }
+
+    public loadFromFontIconCode(source: string, font: Font, color: Color): boolean {
+        // const fileName = getHashCode(`${font.fontFamily}:${source}:${color.argb}`);§
+        // cacheFilePath = fsPath.join(
+        //     knownFolders.temp().path,
+        //     `${fileName}_${font.fontSize}@${layout.getDisplayDensity()}x.png`
+        // );
+
+        const attributedString = NSAttributedString.alloc()
+            .initWithStringAttributes(source, <NSDictionary<string, any>>{
+                [NSFontAttributeName]: font.getUIFont(UIFont.systemFontOfSize(font.fontSize)),
+                [NSForegroundColorAttributeName]: color.ios
+            });
+
+        UIGraphicsBeginImageContextWithOptions(attributedString.size(), false, 0.0);
+        attributedString.drawAtPoint(CGPointMake(0, 0));
+
+        const iconImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        const memory = CGImageGetHeight(iconImage.CGImage) * CGImageGetBytesPerRow(iconImage.CGImage);
+        console.log("MEMORY -> " + memory);
+
+        // const success = UIImagePNGRepresentation(iconImage)
+        //     .writeToFileAtomically(cacheFilePath, true);
+        // if (!success) {
+        //     console.error("Failed to write rendered icon image");
+        // }
+
+        this.ios = iconImage;
+
+        return this.ios != null;
+
+        // if (typeof source === "string") {
+        //     const data = NSData.alloc().initWithBase64EncodedStringOptions(source, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
+        //     this.ios = UIImage.imageWithData(data);
+        // }
+
+        // return this.ios != null;
     }
 
     public setNativeSource(source: any): void {

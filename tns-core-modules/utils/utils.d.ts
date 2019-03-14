@@ -280,6 +280,12 @@ export function isFileOrResourcePath(path: string): boolean
 export function isDataURI(uri: string): boolean
 
 /**
+ * Returns true if the specified URI is a font icon URI like "fontIcon://&#xf1e0".
+ * @param uri The URI.
+ */
+export function isFontIconURI(uri: string): boolean
+
+/**
  * Opens url.
  * @param url The url.
  */

@@ -1,6 +1,6 @@
 ﻿import {
     ImageSource, ImageAsset, ImageBase, stretchProperty, imageSourceProperty, srcProperty, tintColorProperty, Color,
-    isDataURI, isFileOrResourcePath, RESOURCE_PREFIX, Length
+    isDataURI, isFontIconURI, isFileOrResourcePath, RESOURCE_PREFIX, Length
 } from "./image-common";
 import { knownFolders } from "../../file-system";
 
@@ -104,7 +104,7 @@ export class Image extends ImageBase {
             value = value.trim();
             this.isLoading = true;
 
-            if (isDataURI(value)) {
+            if (isFontIconURI(value) || isDataURI(value)) {
                 // TODO: Check with runtime what should we do in case of base64 string.
                 super._createImageSourceFromSrc(value);
             } else if (isFileOrResourcePath(value)) {

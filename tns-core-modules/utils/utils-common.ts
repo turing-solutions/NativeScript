@@ -111,6 +111,15 @@ export function isDataURI(uri: string): boolean {
     return firstSegment && firstSegment.indexOf("data:") === 0 && firstSegment.indexOf("base64") >= 0;
 }
 
+export function isFontIconURI(uri: string): boolean {
+    if (!types.isString(uri)) {
+        return false;
+    }
+
+    const firstSegment = uri.trim().split("//")[0];
+    return firstSegment && firstSegment.indexOf("font:") === 0;
+}
+
 export function mergeSort(arr, compareFunc) {
     if (arr.length < 2) {
         return arr;

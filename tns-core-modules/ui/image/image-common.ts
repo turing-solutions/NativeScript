@@ -2,9 +2,10 @@
 import { View, Property, InheritedCssProperty, Length, Style, Color, isIOS, booleanConverter, CSSType, traceEnabled, traceWrite, traceCategories } from "../core/view";
 import { ImageAsset } from "../../image-asset";
 import { ImageSource, fromAsset, fromNativeSource, fromUrl } from "../../image-source";
-import { isDataURI, isFileOrResourcePath, RESOURCE_PREFIX } from "../../utils/utils";
+import { isDataURI, isFontIconURI, isFileOrResourcePath, RESOURCE_PREFIX } from "../../utils/utils";
+import { Font } from "../styling/font";
 export * from "../core/view";
-export { ImageSource, ImageAsset, fromAsset, fromNativeSource, fromUrl, isDataURI, isFileOrResourcePath, RESOURCE_PREFIX };
+export { ImageSource, ImageAsset, fromAsset, fromNativeSource, fromUrl, isDataURI, isFontIconURI, isFileOrResourcePath, RESOURCE_PREFIX };
 
 @CSSType("Image")
 export abstract class ImageBase extends View implements ImageDefinition {
@@ -46,7 +47,21 @@ export abstract class ImageBase extends View implements ImageDefinition {
                 this.isLoading = false;
             };
 
-            if (isDataURI(value)) {
+            if (isFontIconURI(value)) {
+                const fontIconCode = value.split("//")[1];
+                if (fontIconCode !== undefined) {
+                    if (sync) {
+                        const font = this.style.fontInternal;
+                        const color = this.style.color;
+                        // source.loadFromFontIconCode(fontIconCode, Font.default.withFontFamily("Material Design Icons, MaterialDesignIcons").withFontSize(96), new Color("blue"));
+                        // source.loadFromFontIconCode(fontIconCode, Font.default.withFontFamily("FontAwesome").withFontSize(96), new Color("blue"));
+                        source.loadFromFontIconCode(fontIconCode, font, color);
+                        imageLoaded();
+                    } else {
+                        // source.from(base64Data).then(imageLoaded);
+                    }
+                }
+            } else if (isDataURI(value)) {
                 const base64Data = value.split(",")[1];
                 if (base64Data !== undefined) {
                     if (sync) {
@@ -116,7 +131,7 @@ ImageBase.prototype.recycleNativeView = "auto";
 export const imageSourceProperty = new Property<ImageBase, ImageSource>({ name: "imageSource" });
 imageSourceProperty.register(ImageBase);
 
-export const srcProperty = new Property<ImageBase, any>({ name: "src" });
+export const srcProperty = new Property<ImageBase, string>({ name: "src" });
 srcProperty.register(ImageBase);
 
 export const loadModeProperty = new Property<ImageBase, "sync" | "async">({ name: "loadMode", defaultValue: "sync" });

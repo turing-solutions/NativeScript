@@ -4,6 +4,8 @@
  */ /** */
 
 import * as imageAssetModule from "../image-asset";
+import { Font } from "../ui/styling/font";
+import { Color } from "../color";
 /**
  * Encapsulates the common abstraction behind a platform specific object (typically a Bitmap) that is used as a source for images.
  */
@@ -86,6 +88,14 @@ export class ImageSource {
      * @param source The Base64 string to load the image from.
      */
     fromBase64(source: string): Promise<boolean>;        
+
+    /**
+     * Loads this instance from the specified font icon code.
+     * @param source The hex font icon code string
+     * @param font The font for the corresponding font icon code
+     * @param color The color of the generated icon image
+     */
+    loadFromFontIconCode(source: string, font: Font, color: Color): boolean;
 
    /**
     * Sets the provided native source object (typically a Bitmap or a UIImage).

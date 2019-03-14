@@ -17,6 +17,7 @@ export function loadExamples() {
     examples.set("stretch-modes", "image-view/stretch-modes");
     examples.set("missing-image", "image-view/missing-image");
     examples.set("image-asset", "image-view/image-asset/image-asset");
+    examples.set("font-icon", "image-view/font-icon");
 
     return examples;
 }
