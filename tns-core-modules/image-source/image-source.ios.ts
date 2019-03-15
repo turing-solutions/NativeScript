@@ -138,11 +138,25 @@ export class ImageSource implements ImageSourceDefinition {
         //     `${fileName}_${font.fontSize}@${layout.getDisplayDensity()}x.png`
         // );
 
-        const attributedString = NSAttributedString.alloc()
-            .initWithStringAttributes(source, <NSDictionary<string, any>>{
-                [NSFontAttributeName]: font.getUIFont(UIFont.systemFontOfSize(font.fontSize)),
-                [NSForegroundColorAttributeName]: color.ios
-            });
+        let fontSize = null;
+
+        if (!font.fontSize) {
+            const defaultNativeFontSize = UIFont.labelFontSize;
+            const density = layout.getDisplayDensity();
+            fontSize = defaultNativeFontSize * density;
+        } else {
+            fontSize = font.fontSize;
+        }
+
+        const attributes = {
+            [NSFontAttributeName]: font.getUIFont(UIFont.systemFontOfSize(fontSize))
+        };
+
+        if (color) {
+            attributes[NSForegroundColorAttributeName] = color.ios;
+        }
+
+        const attributedString = NSAttributedString.alloc().initWithStringAttributes(source, <NSDictionary<string, any>>attributes);
 
         UIGraphicsBeginImageContextWithOptions(attributedString.size(), false, 0.0);
         attributedString.drawAtPoint(CGPointMake(0, 0));

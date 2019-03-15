@@ -143,13 +143,20 @@ export class ImageSource implements ImageSourceDefinition {
     public loadFromFontIconCode(source: string, font: Font, color: Color): boolean {
         const paint = new android.graphics.Paint();
         paint.setTypeface(font.getAndroidTypeface());
+        paint.setAntiAlias(true);
+
         if (color) {
             paint.setColor(color.android);
         }
+
         if (font.fontSize) {
             paint.setTextSize(layout.toDevicePixels(font.fontSize));
+        } else {
+            const defaultNativeFontSize = paint.getTextSize();
+            const density = layout.getDisplayDensity();
+            const fontSize = defaultNativeFontSize * density;
+            paint.setTextSize(fontSize);
         }
-        paint.setAntiAlias(true);
 
         const textBounds = new android.graphics.Rect();
         paint.getTextBounds(source, 0, source.length, textBounds);
