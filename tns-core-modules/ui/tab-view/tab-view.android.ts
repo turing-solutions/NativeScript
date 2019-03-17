@@ -9,8 +9,8 @@ import {
     traceWrite, Color, traceMissingIcon
 } from "./tab-view-common"
 import { textTransformProperty, TextTransform, getTransformedText } from "../text-base";
-import { fromFileOrResource } from "../../image-source";
-import { RESOURCE_PREFIX, ad } from "../../utils/utils";
+import { fromFileOrResource, fromFontIconCode, ImageSource } from "../../image-source";
+import { RESOURCE_PREFIX, ad, isFontIconURI } from "../../utils/utils";
 import { Frame } from "../frame";
 import * as application from "../../application";
 
@@ -225,7 +225,7 @@ function initializeNativeClasses() {
             }
         }
     }
-    
+
     PagerAdapter = FragmentPagerAdapter;
 }
 
@@ -240,7 +240,16 @@ function createTabItemSpec(item: TabViewItem): org.nativescript.widgets.TabItemS
                 traceMissingIcon(item.iconSource);
             }
         } else {
-            const is = fromFileOrResource(item.iconSource);
+            let is = new ImageSource();
+            if (isFontIconURI(item.iconSource)) {
+                const fontIconCode = item.iconSource.split("//")[1];
+                const font = item.style.fontInternal;
+                const color = item.style.color;
+                is = fromFontIconCode(fontIconCode, font, color);
+            } else {
+                is = fromFileOrResource(item.iconSource);
+            }
+
             if (is) {
                 // TODO: Make this native call that accepts string so that we don't load Bitmap in JS.
                 result.iconDrawable = new android.graphics.drawable.BitmapDrawable(application.android.context.getResources(), is.android);
@@ -548,7 +557,7 @@ export class TabView extends TabViewBase {
 
     public _onRootViewReset(): void {
         super._onRootViewReset();
-        
+
         // call this AFTER the super call to ensure descendants apply their rootview-reset logic first
         // i.e. in a scenario with tab frames let the frames cleanup their fragments first, and then
         // cleanup the tab fragments to avoid
