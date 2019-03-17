@@ -18,17 +18,6 @@ function ensureHttp() {
     }
 }
 
-function getHashCode(value: any): number {
-    var hash = 0;
-    if (value.length === 0) { return hash };
-    for (const i in value) {
-        const char = value.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-    return hash;
-}
-
 export class ImageSource implements ImageSourceDefinition {
     public android: android.graphics.Bitmap;
     public ios: UIImage;
@@ -294,6 +283,11 @@ export function fromData(data: any): ImageSource {
 export function fromBase64(source: string): ImageSource {
     const image = new ImageSource();
     return image.loadFromBase64(source) ? image : null;
+}
+
+export function fromFontIconCode(source: string, font: Font, color: Color): ImageSource {
+    const image = new ImageSource();
+    return image.loadFromFontIconCode(source, font, color) ? image : null;
 }
 
 export function fromNativeSource(source: any): ImageSource {

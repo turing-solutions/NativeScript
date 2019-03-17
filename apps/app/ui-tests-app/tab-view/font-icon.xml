@@ -1,22 +1,22 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigate">
-    <TabView id="tab-view" tabTextColor="green" selectedTabTextColor="red" tabBackgroundColor="yellow">
+    <TabView id="tab-view" tabTextColor="green" selectedTabTextColor="red" tabBackgroundColor="yellow" class="font-awesome font-size color">
         <TabView.items>
-            <TabViewItem iconSource="res://icon">
+            <TabViewItem iconSource="font://&#xF10B;" class="font-awesome">
                 <TabViewItem.view>
                     <Button text="undefined" tap="onChangeRenderingMode"/>
                 </TabViewItem.view>
             </TabViewItem>
-            <TabViewItem iconSource="res://add_to_fav">
+            <TabViewItem iconSource="font://&#xF10B;">
                 <TabViewItem.view>
                     <Button text="undefined" tap="onChangeRenderingMode"/>
                 </TabViewItem.view>
             </TabViewItem>
-            <TabViewItem iconSource="res://icon" title="NativeScript">
+            <TabViewItem iconSource="font://&#xF10B;" title="NativeScript">
                 <TabViewItem.view>
                     <Button text="undefined" tap="onChangeRenderingMode"/>
                 </TabViewItem.view>
             </TabViewItem>
-            <TabViewItem iconSource="res://add_to_fav" title="Favorites">
+            <TabViewItem iconSource="font://&#xF10B;" title="Favorites">
                 <TabViewItem.view>
                     <Button text="undefined" tap="onChangeRenderingMode"/>
                 </TabViewItem.view>

@@ -300,6 +300,11 @@ export function fromBase64(source: string): ImageSource {
     return image.loadFromBase64(source) ? image : null;
 }
 
+export function fromFontIconCode(source: string, font: Font, color: Color): ImageSource {
+    const image = new ImageSource();
+    return image.loadFromFontIconCode(source, font, color) ? image : null;
+}
+
 export function fromNativeSource(source: any): ImageSource {
     const imageSource = new ImageSource();
     imageSource.setNativeSource(source);
