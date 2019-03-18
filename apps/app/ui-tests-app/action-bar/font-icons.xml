@@ -1,0 +1,16 @@
+<Page>
+  <Page.actionBar>
+    <ActionBar>
+      <ActionBar.actionItems>
+        <ActionItem icon="font://&#xF10B;" class="font-awesome" tap="navigate"/>
+        <ActionItem icon="font://&#xF10B;" tap="navigate"/>
+        <ActionItem icon="font://&#xF556;" class="font-awesome" tap="navigate"/>
+      </ActionBar.actionItems>
+    </ActionBar>
+  </Page.actionBar>
+
+  <StackLayout>
+    <Button text="go to cleared page" tap="navigate"/>
+    <Button text="undefined" tap="onChangeRenderingMode"/>
+  </StackLayout>
+</Page>
