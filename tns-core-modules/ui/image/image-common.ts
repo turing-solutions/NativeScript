@@ -53,8 +53,6 @@ export abstract class ImageBase extends View implements ImageDefinition {
                     if (sync) {
                         const font = this.style.fontInternal;
                         const color = this.style.color;
-                        // source.loadFromFontIconCode(fontIconCode, Font.default.withFontFamily("Material Design Icons, MaterialDesignIcons").withFontSize(96), new Color("blue"));
-                        // source.loadFromFontIconCode(fontIconCode, Font.default.withFontFamily("FontAwesome").withFontSize(96), new Color("blue"));
                         source.loadFromFontIconCode(fontIconCode, font, color);
                         imageLoaded();
                     } else {
@@ -131,7 +129,7 @@ ImageBase.prototype.recycleNativeView = "auto";
 export const imageSourceProperty = new Property<ImageBase, ImageSource>({ name: "imageSource" });
 imageSourceProperty.register(ImageBase);
 
-export const srcProperty = new Property<ImageBase, string>({ name: "src" });
+export const srcProperty = new Property<ImageBase, any>({ name: "src" });
 srcProperty.register(ImageBase);
 
 export const loadModeProperty = new Property<ImageBase, "sync" | "async">({ name: "loadMode", defaultValue: "sync" });

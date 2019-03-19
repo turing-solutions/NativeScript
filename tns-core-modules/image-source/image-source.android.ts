@@ -171,31 +171,7 @@ export class ImageSource implements ImageSourceDefinition {
         const canvas = new android.graphics.Canvas(bitmap);
         canvas.drawText(source, -textBounds.left, -textBounds.top, paint);
 
-        // const memory = bitmap.getRowBytes() * bitmap.getByteCount();
-        const memory = bitmap.getByteCount();
-        console.log("MEMORY -> " + memory);
-
         this.android = bitmap;
-
-        // let fos = null;
-
-        // try {
-        //     fos = new java.io.FileOutputStream(new java.io.File(cacheFilePath));
-        //     bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
-        //     fos.flush();
-        // } catch (error) {
-        //     console.error(error);
-        // } finally {
-        //     try {
-        //         if (fos != null) {
-        //             fos.close();
-        //             fos = null;
-        //         }
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        // }
-
         return this.android != null;
     }
 

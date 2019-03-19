@@ -121,12 +121,6 @@ export class ImageSource implements ImageSourceDefinition {
     }
 
     public loadFromFontIconCode(source: string, font: Font, color: Color): boolean {
-        // const fileName = getHashCode(`${font.fontFamily}:${source}:${color.argb}`);§
-        // cacheFilePath = fsPath.join(
-        //     knownFolders.temp().path,
-        //     `${fileName}_${font.fontSize}@${layout.getDisplayDensity()}x.png`
-        // );
-
         let fontSize = null;
 
         if (!font.fontSize) {
@@ -153,25 +147,8 @@ export class ImageSource implements ImageSourceDefinition {
         const iconImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
 
-        const memory = CGImageGetHeight(iconImage.CGImage) * CGImageGetBytesPerRow(iconImage.CGImage);
-        console.log("MEMORY -> " + memory);
-
-        // const success = UIImagePNGRepresentation(iconImage)
-        //     .writeToFileAtomically(cacheFilePath, true);
-        // if (!success) {
-        //     console.error("Failed to write rendered icon image");
-        // }
-
         this.ios = iconImage;
-
         return this.ios != null;
-
-        // if (typeof source === "string") {
-        //     const data = NSData.alloc().initWithBase64EncodedStringOptions(source, NSDataBase64DecodingOptions.IgnoreUnknownCharacters);
-        //     this.ios = UIImage.imageWithData(data);
-        // }
-
-        // return this.ios != null;
     }
 
     public setNativeSource(source: any): void {
