@@ -121,18 +121,17 @@ export class ImageSource implements ImageSourceDefinition {
     }
 
     public loadFromFontIconCode(source: string, font: Font, color: Color): boolean {
-        let fontSize = null;
-
-        if (!font.fontSize) {
-            const defaultNativeFontSize = UIFont.labelFontSize;
-            const density = layout.getDisplayDensity();
-            fontSize = defaultNativeFontSize * density;
-        } else {
-            fontSize = font.fontSize;
+        let fontSize = layout.toDevicePixels(font.fontSize);
+        if (!fontSize) {
+            // TODO: Consider making 36 font size as default for optimal look on TabView and ActionBar
+            fontSize = UIFont.labelFontSize;
         }
 
+        const density = layout.getDisplayDensity();
+        const scaledFontSize = fontSize * density;
+
         const attributes = {
-            [NSFontAttributeName]: font.getUIFont(UIFont.systemFontOfSize(fontSize))
+            [NSFontAttributeName]: font.getUIFont(UIFont.systemFontOfSize(scaledFontSize))
         };
 
         if (color) {

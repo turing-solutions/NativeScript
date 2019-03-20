@@ -149,14 +149,15 @@ export class ImageSource implements ImageSourceDefinition {
             paint.setColor(color.android);
         }
 
-        if (font.fontSize) {
-            paint.setTextSize(layout.toDevicePixels(font.fontSize));
-        } else {
-            const defaultNativeFontSize = paint.getTextSize();
-            const density = layout.getDisplayDensity();
-            const fontSize = defaultNativeFontSize * density;
-            paint.setTextSize(fontSize);
+        let fontSize = layout.toDevicePixels(font.fontSize);
+        if (!fontSize) {
+            // TODO: Consider making 36 font size as default for optimal look on TabView and ActionBar
+            fontSize = paint.getTextSize();
         }
+
+        const density = layout.getDisplayDensity();
+        const scaledFontSize = fontSize * density;
+        paint.setTextSize(scaledFontSize);
 
         const textBounds = new android.graphics.Rect();
         paint.getTextBounds(source, 0, source.length, textBounds);
