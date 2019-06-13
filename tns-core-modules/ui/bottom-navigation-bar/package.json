@@ -1,0 +1,5 @@
+{
+  "name" : "bottom-navigation-bar",
+  "main" : "bottom-navigation-bar",
+  "types" : "bottom-navigation-bar.d.ts"
+}

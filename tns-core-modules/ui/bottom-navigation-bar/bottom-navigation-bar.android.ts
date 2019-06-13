@@ -2,10 +2,11 @@
 import { TabStrip } from "../tab-navigation-base/tab-strip";
 import { TabStripItem } from "../tab-navigation-base/tab-strip-item";
 import { TabContentItem } from "../tab-navigation-base/tab-content-item";
+import { Color } from "../core/view";
 
 // Requires
 import { TabNavigationBase, itemsProperty, selectedIndexProperty, tabStripProperty } from "../tab-navigation-base/tab-navigation-base";
-import { CSSType, Color } from "../core/view";
+import { CSSType } from "../core/view";
 import { Frame } from "../frame";
 import { RESOURCE_PREFIX, ad, layout } from "../../utils/utils";
 import { fromFileOrResource } from "../../image-source";
@@ -20,8 +21,8 @@ export * from "../tab-navigation-base/tab-strip-item";
 const PRIMARY_COLOR = "colorPrimary";
 const DEFAULT_ELEVATION = 8;
 
-const TABID = "_tabId";
-const INDEX = "_index";
+// const TABID = "_tabId";
+// const INDEX = "_index";
 let TabFragment: any;
 let BottomNavigationBar: any;
 
@@ -29,54 +30,54 @@ function makeFragmentName(viewId: number, id: number): string {
     return "android:bottomnavigation:" + viewId + ":" + id;
 }
 
-function getTabById(id: number): BottomNavigation {
-    const ref = tabs.find(ref => {
-        const tab = ref.get();
-        return tab && tab._domId === id;
-    });
+// function getTabById(id: number): BottomNavigation {
+//     const ref = tabs.find(ref => {
+//         const tab = ref.get();
+//         return tab && tab._domId === id;
+//     });
 
-    return ref && ref.get();
-}
+//     return ref && ref.get();
+// }
 
 function initializeNativeClasses() {
     if (BottomNavigationBar) {
         return;
     }
 
-    class TabFragmentImplementation extends org.nativescript.widgets.FragmentBase {
-        private tab: BottomNavigation;
-        private index: number;
+    // class TabFragmentImplementation extends org.nativescript.widgets.FragmentBase {
+    //     private tab: BottomNavigation;
+    //     private index: number;
 
-        constructor() {
-            super();
-            return global.__native(this);
-        }
+    //     constructor() {
+    //         super();
+    //         return global.__native(this);
+    //     }
 
-        static newInstance(tabId: number, index: number): TabFragmentImplementation {
-            const args = new android.os.Bundle();
-            args.putInt(TABID, tabId);
-            args.putInt(INDEX, index);
-            const fragment = new TabFragmentImplementation();
-            fragment.setArguments(args);
-            return fragment;
-        }
+    //     static newInstance(tabId: number, index: number): TabFragmentImplementation {
+    //         const args = new android.os.Bundle();
+    //         args.putInt(TABID, tabId);
+    //         args.putInt(INDEX, index);
+    //         const fragment = new TabFragmentImplementation();
+    //         fragment.setArguments(args);
+    //         return fragment;
+    //     }
 
-        public onCreate(savedInstanceState: android.os.Bundle): void {
-            super.onCreate(savedInstanceState);
-            const args = this.getArguments();
-            this.tab = getTabById(args.getInt(TABID));
-            this.index = args.getInt(INDEX)
-            if (!this.tab) {
-                throw new Error(`Cannot find BottomNavigation`);
-            }
-        }
+    //     public onCreate(savedInstanceState: android.os.Bundle): void {
+    //         super.onCreate(savedInstanceState);
+    //         const args = this.getArguments();
+    //         this.tab = getTabById(args.getInt(TABID));
+    //         this.index = args.getInt(INDEX)
+    //         if (!this.tab) {
+    //             throw new Error(`Cannot find BottomNavigation`);
+    //         }
+    //     }
 
-        public onCreateView(inflater: android.view.LayoutInflater, container: android.view.ViewGroup, savedInstanceState: android.os.Bundle): android.view.View {
-            const tabItem = this.tab.items[this.index];
+    //     public onCreateView(inflater: android.view.LayoutInflater, container: android.view.ViewGroup, savedInstanceState: android.os.Bundle): android.view.View {
+    //         const tabItem = this.tab.items[this.index];
 
-            return tabItem.view.nativeViewProtected;
-        }
-    }
+    //         return tabItem.view.nativeViewProtected;
+    //     }
+    // }
 
     class BottomNavigationBarImplementation extends org.nativescript.widgets.BottomNavigationBar {
 
@@ -91,7 +92,7 @@ function initializeNativeClasses() {
         }
     }    
 
-    TabFragment = TabFragmentImplementation;
+    // TabFragment = TabFragmentImplementation;
     BottomNavigationBar = BottomNavigationBarImplementation;
 }
 
@@ -354,16 +355,13 @@ export class BottomNavigation extends TabNavigationBase {
         this._bottomNavigationBar.updateItemAt(index, spec);
     }
 
-    public getTabBarBackgroundColor(): android.graphics.drawable.Drawable {
-        return this._bottomNavigationBar.getBackground();
+    public getTabBarBackgroundColor(): Color {
+        // overridden by inheritors
+        return null;
     }
 
-    public setTabBarBackgroundColor(value: android.graphics.drawable.Drawable | Color): void {
-        if (value instanceof Color) {
-            this._bottomNavigationBar.setBackgroundColor(value.android);
-        } else {
-            this._bottomNavigationBar.setBackground(tryCloneDrawable(value, this.nativeViewProtected.getResources));
-        }
+    public setTabBarBackgroundColor(color: Color): void {
+        // overridden by inheritors
     }
 
     [selectedIndexProperty.setNative](value: number) {
@@ -389,15 +387,4 @@ export class BottomNavigation extends TabNavigationBase {
     [tabStripProperty.setNative](value: TabStrip) {
         this.setAdapterItems([]);
     }
-}
-
-function tryCloneDrawable(value: android.graphics.drawable.Drawable, resources: android.content.res.Resources): android.graphics.drawable.Drawable {
-    if (value) {
-        const constantState = value.getConstantState();
-        if (constantState) {
-            return constantState.newDrawable(resources);
-        }
-    }
-
-    return value;
 }

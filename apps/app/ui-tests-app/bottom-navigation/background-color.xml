@@ -4,7 +4,7 @@
   </ActionBar>
 
   <BottomNavigation style="background-color: green;">
-    <TabStrip>
+    <TabStrip style="background-color: red;" backgroundColor="blue">
         <TabStripItem title="First"></TabStripItem>
         <TabStripItem title="Second"></TabStripItem>
     </TabStrip>

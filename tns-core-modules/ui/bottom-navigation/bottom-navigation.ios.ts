@@ -274,6 +274,14 @@ export class BottomNavigation extends TabNavigationBase {
         super.onSelectedIndexChanged(oldIndex, newIndex);
     }
 
+    public getTabBarBackgroundColor(): UIColor {
+        return this._ios.tabBar.barTintColor;
+    }
+
+    public setTabBarBackgroundColor(value: UIColor | Color): void {
+        this._ios.tabBar.barTintColor = value instanceof Color ? value.ios : value;
+    }
+
     public onMeasure(widthMeasureSpec: number, heightMeasureSpec: number): void {
         const width = layout.getMeasureSpecSize(widthMeasureSpec);
         const widthMode = layout.getMeasureSpecMode(widthMeasureSpec);

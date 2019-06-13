@@ -82,6 +82,18 @@ export class TabNavigationBase extends View {
      * Method is intended to be overridden by inheritors and used as "protected"
      */
     onSelectedIndexChanged(oldIndex: number, newIndex: number): void;
+
+    /**
+     * @private
+     * 
+     */
+    getTabBarBackgroundColor(): any
+
+    /**
+     * @private
+     * 
+     */
+    setTabBarBackgroundColor(value: any): void
 }
 
 export const itemsProperty: Property<TabNavigationBase, TabContentItem[]>;

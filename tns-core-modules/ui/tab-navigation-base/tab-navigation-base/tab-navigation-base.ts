@@ -2,7 +2,7 @@
 import { TabNavigationBase as TabNavigationBaseDefinition, SelectedIndexChangedEventData } from ".";
 import { TabContentItem } from "../tab-content-item";
 import { TabStrip } from "../tab-strip";
-import { ViewBase, AddArrayFromBuilder, AddChildFromBuilder, EventData } from "../../core/view";
+import { ViewBase, AddArrayFromBuilder, AddChildFromBuilder, EventData, Color } from "../../core/view";
 
 // Requires
 import { View, Property, CoercibleProperty, isIOS } from "../../core/view";
@@ -57,6 +57,11 @@ export class TabNavigationBase extends View implements TabNavigationBaseDefiniti
                 callback(item);
             });
         }
+
+        const tabStrip = this.tabStrip;
+        if (tabStrip) {
+            callback(tabStrip);
+        }
     }
 
     public eachChildView(callback: (child: View) => boolean) {
@@ -99,6 +104,15 @@ export class TabNavigationBase extends View implements TabNavigationBaseDefiniti
     public onSelectedIndexChanged(oldIndex: number, newIndex: number): void {
         // to be overridden in platform specific files
         this.notify(<SelectedIndexChangedEventData>{ eventName: TabNavigationBase.selectedIndexChangedEvent, object: this, oldIndex, newIndex });
+    }
+
+    public getTabBarBackgroundColor(): any {
+        // overridden by inheritors
+        return null;
+    }
+
+    public setTabBarBackgroundColor(value: any): void {
+        // overridden by inheritors
     }
 }
 
