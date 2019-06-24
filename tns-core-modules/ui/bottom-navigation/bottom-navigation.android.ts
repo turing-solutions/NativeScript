@@ -347,6 +347,11 @@ export class BottomNavigation extends TabNavigationBase {
             });
 
             this._bottomNavigationBar.setItems(tabItems);
+            this.tabStrip.setNativeView(this._bottomNavigationBar);
+            this.tabStrip.items.forEach((item, i, arr) => {
+                const tv = this._bottomNavigationBar.getTextViewForItemAt(i);
+                item.setNativeView(tv);
+            });
         }
     }
 

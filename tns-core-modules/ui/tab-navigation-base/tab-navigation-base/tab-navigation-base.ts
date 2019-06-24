@@ -34,9 +34,10 @@ export class TabNavigationBase extends View implements TabNavigationBaseDefiniti
             }
             this.items.push(<TabContentItem>value);
             this._addView(value);
-            selectedIndexProperty.coerce(this);
+            // selectedIndexProperty.coerce(this);
         } else if (name === "TabStrip") {
             this.tabStrip = value;
+            this._addView(value);
         }
     }
 

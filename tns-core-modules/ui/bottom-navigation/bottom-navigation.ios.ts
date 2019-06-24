@@ -385,6 +385,10 @@ export class BottomNavigation extends TabNavigationBase {
         const controllers = NSMutableArray.alloc<UIViewController>().initWithCapacity(length);
         const states = getTitleAttributesForStates(this);
 
+        if (this.tabStrip) {
+            this.tabStrip.setNativeView(this._ios.tabBar);
+        }
+
         items.forEach((item, i) => {
             const controller = this.getViewController(item);
 
@@ -402,6 +406,7 @@ export class BottomNavigation extends TabNavigationBase {
                 applyStatesToItem(tabBarItem, states);
 
                 controller.tabBarItem = tabBarItem;
+                tabStripItem.setNativeView(tabBarItem);
             }
 
             controllers.addObject(controller);
