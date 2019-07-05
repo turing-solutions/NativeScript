@@ -14,6 +14,8 @@ export const traceCategory = "TabView";
 export class TabStrip extends View implements TabStripDefinition, AddChildFromBuilder, AddArrayFromBuilder {
     public items: TabStripItem[];
     public iosIconRenderingMode: "automatic" | "alwaysOriginal" | "alwaysTemplate";
+    public _hasImage: boolean;
+    public _hasTitle: boolean;
 
     public _addArrayFromBuilder(name: string, value: Array<any>) {
         if (name === "items") {
@@ -39,7 +41,7 @@ export class TabStrip extends View implements TabStripDefinition, AddChildFromBu
     }
     [backgroundColorProperty.setNative](value: Color) {
         const parent = <TabNavigationBase>this.parent;
-        
+
         return parent && parent.setTabBarBackgroundColor(value);
     }
 
@@ -49,7 +51,7 @@ export class TabStrip extends View implements TabStripDefinition, AddChildFromBu
     [backgroundInternalProperty.setNative](value: any) {
         // disable the background CSS properties
     }
-} 
+}
 
 export const iosIconRenderingModeProperty = new Property<TabStrip, "automatic" | "alwaysOriginal" | "alwaysTemplate">({ name: "iosIconRenderingMode", defaultValue: "automatic" });
 iosIconRenderingModeProperty.register(TabStrip);

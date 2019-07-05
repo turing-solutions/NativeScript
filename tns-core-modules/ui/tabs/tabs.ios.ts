@@ -546,8 +546,6 @@ export class Tabs extends TabsBase {
     private _delegate: UIPageViewControllerDelegateImpl;
     // private _moreNavigationControllerDelegate: UINavigationControllerDelegateImpl;
     private _iconsCache = {};
-    private _hasImage;
-    private _hasTitle;
 
     constructor() {
         super();
@@ -834,7 +832,7 @@ export class Tabs extends TabsBase {
         const tabBarItems = [];
 
         items.forEach((item: TabStripItem, i) => {
-            const tabBarItem = this.createTabItemSpec(item, i);
+            const tabBarItem = this.createTabBarItem(item, i);
             tabBarItems.push(tabBarItem);
             item.setNativeView(tabBarItem);
         });
@@ -869,7 +867,7 @@ export class Tabs extends TabsBase {
         // });
     }
 
-    private createTabItemSpec(item: TabStripItem, index: number): UITabBarItem {
+    private createTabBarItem(item: TabStripItem, index: number): UITabBarItem {
         let image: UIImage;
         let title: string;
 
@@ -878,12 +876,12 @@ export class Tabs extends TabsBase {
         image = item.image ? this._getIcon(item.image.src) : this._getIcon(item.iconSource);
         title = item.label ? item.label.text : item.title;
 
-        if (!this.viewController.tabBar._hasImage) {
-            this.viewController.tabBar._hasImage = !!image;
+        if (!this.tabStrip._hasImage) {
+            this.tabStrip._hasImage = !!image;
         }
 
-        if (!this.viewController.tabBar._hasTitle) {
-            this.viewController.tabBar._hasTitle = !!title;
+        if (!this.tabStrip._hasTitle) {
+            this.tabStrip._hasTitle = !!title;
         }
 
         const tabBarItem = UITabBarItem.alloc().initWithTitleImageTag(title, image, index);
@@ -893,9 +891,9 @@ export class Tabs extends TabsBase {
 
     private _getTabBarItemAppearance(): MDCTabBarItemAppearance {
         let itemAppearance;
-        if (this.viewController.tabBar._hasImage && this.viewController.tabBar._hasTitle) {
+        if (this.tabStrip._hasImage && this.tabStrip._hasTitle) {
             itemAppearance = MDCTabBarItemAppearance.TitledImages;
-        } else if (this.viewController.tabBar._hasImage) {
+        } else if (this.tabStrip._hasImage) {
             itemAppearance = MDCTabBarItemAppearance.Images;
         } else {
             itemAppearance = MDCTabBarItemAppearance.Titles;
