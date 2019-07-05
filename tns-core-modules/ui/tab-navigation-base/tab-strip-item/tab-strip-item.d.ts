@@ -4,6 +4,8 @@
  */ /** */
 
 import { ViewBase } from "../../core/view";
+import { Image } from "../../image/image";
+import { Label } from "../../label/label";
 
 /**
  * Represents a tab strip entry.
@@ -18,4 +20,14 @@ export class TabStripItem extends ViewBase {
      * Gets or sets the icon source of the tab strip entry.
      */
     iconSource: string;
+
+    /**
+     * Gets or sets the label of the tab strip entry.
+     */
+    label: Label;
+
+    /**
+     * Gets or sets the image of the tab strip entry.
+     */
+    image: Image;
 }
