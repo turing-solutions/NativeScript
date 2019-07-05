@@ -287,7 +287,7 @@ class UIPageViewControllerDataSourceImpl extends NSObject implements UIPageViewC
         const owner = this._owner.get();
         let selectedIndex = owner.selectedIndex;
 
-        if (selectedIndex === 2) {
+        if (selectedIndex === owner.items.length - 1) {
             return null;
         }
 
@@ -352,7 +352,7 @@ class UIPageViewControllerDelegateImpl extends NSObject implements UIPageViewCon
         //
     }
 
-    public pageViewControllerDidFinishAnimatingPreviousViewControllersTransitionCompleted(pageViewController: UIPageViewController, didFinishAnimating: boolean,  previousViewControllers: NSArray<UIViewController>, transitionCompleted: boolean): void {
+    public pageViewControllerDidFinishAnimatingPreviousViewControllersTransitionCompleted(pageViewController: UIPageViewController, didFinishAnimating: boolean, previousViewControllers: NSArray<UIViewController>, transitionCompleted: boolean): void {
         if (!transitionCompleted) {
             return;
         }
@@ -366,7 +366,7 @@ class UIPageViewControllerDelegateImpl extends NSObject implements UIPageViewCon
         if (selectedIndex !== nextViewControllerIndex) {
             owner.selectedIndex = nextViewControllerIndex;
         }
-        
+
         console.log("test");
         //
     }
@@ -812,7 +812,7 @@ export class Tabs extends TabsBase {
 
         // items.forEach((item, i) => {
         //     const controller = this.getViewController(item);
-                                                                            
+
         //     let icon = null;
         //     let title = "";
 
