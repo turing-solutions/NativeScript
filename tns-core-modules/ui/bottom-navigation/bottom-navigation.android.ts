@@ -7,8 +7,10 @@ import { TabContentItem } from "../tab-navigation-base/tab-content-item";
 import { TabNavigationBase, itemsProperty, selectedIndexProperty, tabStripProperty } from "../tab-navigation-base/tab-navigation-base";
 import { CSSType, Color } from "../core/view";
 import { Frame } from "../frame";
-import { RESOURCE_PREFIX, ad, layout } from "../../utils/utils";
 import { fromFileOrResource } from "../../image-source";
+import { RESOURCE_PREFIX, ad, layout } from "../../utils/utils";
+import * as application from "../../application";
+
 // TODO: Impl trace
 // import { isEnabled as traceEnabled, write as traceWrite } from "../../../trace";
 
@@ -99,31 +101,36 @@ function initializeNativeClasses() {
     BottomNavigationBar = BottomNavigationBarImplementation;
 }
 
-function createTabItemSpec(tabStripItem: TabStripItem): org.nativescript.widgets.TabItemSpec {
-    const result = new org.nativescript.widgets.TabItemSpec();
-    result.title = tabStripItem.title;
+function createTabItemSpec(item: TabStripItem): org.nativescript.widgets.TabItemSpec {
+    let iconSource;
+    const tabItemSpec = new org.nativescript.widgets.TabItemSpec();
 
-    if (tabStripItem.iconSource) {
-        if (tabStripItem.iconSource.indexOf(RESOURCE_PREFIX) === 0) {
-            result.iconId = ad.resources.getDrawableId(tabStripItem.iconSource.substr(RESOURCE_PREFIX.length));
-            if (result.iconId === 0) {
+    // Image and Label children of TabStripItem
+    // take priority over its `iconSource` and `title` properties
+    iconSource = item.image ? item.image.src : item.iconSource;
+    tabItemSpec.title = item.label ? item.label.text : item.title;
+
+    if (iconSource) {
+        if (iconSource.indexOf(RESOURCE_PREFIX) === 0) {
+            tabItemSpec.iconId = ad.resources.getDrawableId(iconSource.substr(RESOURCE_PREFIX.length));
+            if (tabItemSpec.iconId === 0) {
                 // TODO:
-                // traceMissingIcon(tabStripItem.iconSource);
+                // traceMissingIcon(iconSource);
             }
         } else {
-            const is = fromFileOrResource(tabStripItem.iconSource);
+            const is = fromFileOrResource(item.iconSource);
             if (is) {
                 // TODO: Make this native call that accepts string so that we don't load Bitmap in JS.
                 // tslint:disable-next-line:deprecation
-                result.iconDrawable = new android.graphics.drawable.BitmapDrawable(is.android);
+                tabItemSpec.iconDrawable = new android.graphics.drawable.BitmapDrawable(application.android.context.getResources(), is.android);
             } else {
                 // TODO:
-                // traceMissingIcon(tabStripItem.iconSource);
+                // traceMissingIcon(iconSource);
             }
         }
     }
 
-    return result;
+    return tabItemSpec;
 }
 
 function setElevation(grid: org.nativescript.widgets.GridLayout, bottomNavigationBar: org.nativescript.widgets.BottomNavigationBar) {
